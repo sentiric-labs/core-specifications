@@ -14,5 +14,7 @@ Ajanlar ve Operatörler birbirleriyle SADECE `content-engine` reposundaki GitHub
 *   Sistem birincil zeka motoru olarak `Gemini Flash` modelini kullanacaktır.
 *   Hiçbir ajan, dışarıdan ücretli bir API'ye (örneğin pahalı bir stok video API'sine) doğrudan izinsiz bağlanamaz. Her şey metin, JSON ve Markdown formatında taslak (blueprint) olarak sunulur.
 
-## 4. Stratejik Hafıza Kuralı
-Her ajan (Data, Visual, Script), yeni bir içerik tasarlamadan önce `behavior-engine` reposundaki "Insight Report" (Öğrenme Raporları) dosyalarını okumak ve bu raporlardaki uyarıları bir sonraki işine "Kritik Güncelleme" olarak yansıtmak ZORUNDADIR. Hafızasız üretim yapmak sistem hatası kabul edilir.
+## 4. Stratejik Hafıza ve Öğrenme Döngüsü
+*   Sistem, `behavior-engine` üzerinden gelen geçmiş performans verilerini (Insights) bir "Kurumsal Hafıza" olarak kullanır.
+*   Hiçbir içerik, geçmişteki bir hatayı (Örn: düşük izlenme süresi, zayıf tempo) tekrarlayamaz.
+*   Her yeni senaryo ve fikir, bir önceki başarılı elementleri koruyup başarısız olanları elimine etmek zorundadır.
