@@ -12,7 +12,7 @@ Bu organizasyon, LLM (Gemini) ajanları tarafından yönetilen, kendi kendini te
 ## 🗺️ Master Yol Haritası (Nerede Kaldık?)
 - [x] **FAZ 1:** GitHub Org ve Repoların açılması, AGPL-3.0 lisanslanması.
 - [x] **FAZ 2:** Sistem Anayasasının (Spec-00 - Spec-04) yazılması.
-- [ ] **FAZ 3:** `agent-orchestrator` Node.js altyapısının kurulması (package.json, TypeScript).
-- [ ] **FAZ 4:** GitHub (Octokit) ve Google AI Studio (Gemini) API bağlantılarının kodlanması.
-- [ ] **FAZ 5:** Ajanların ilk kez uyanıp `@Wiliam-Louis` kanalı için Niche (Niş) ve hedef kitle stratejisi üretmesi (Issue olarak).
-- [ ] **FAZ 6:** GitHub Actions ile günlük (Cron Job) otomasyon döngüsünün başlatılması.
+- [x] **FAZ 3:** `agent-orchestrator` Node.js altyapısının kurulması.
+- [x] **FAZ 4:** GitHub ve Google AI Studio (Gemini 3 Flash) API bağlantılarının kodlanması.
+- [x] **FAZ 5:** Ajanların ilk kez uyanıp `@Wiliam-Louis` kanalı için Niche ve ilk video stratejisini (Issue olarak) üretmesi.
+- [x] **FAZ 6:** GitHub Actions ile günlük otonom çalışma döngüsünün başlatılması.
