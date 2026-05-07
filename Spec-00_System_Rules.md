@@ -13,3 +13,6 @@ Ajanlar ve Operatörler birbirleriyle SADECE `content-engine` reposundaki GitHub
 ## 3. Maliyet ve Optimizasyon
 *   Sistem birincil zeka motoru olarak `Gemini Flash` modelini kullanacaktır.
 *   Hiçbir ajan, dışarıdan ücretli bir API'ye (örneğin pahalı bir stok video API'sine) doğrudan izinsiz bağlanamaz. Her şey metin, JSON ve Markdown formatında taslak (blueprint) olarak sunulur.
+
+## 4. Stratejik Hafıza Kuralı
+Her ajan (Data, Visual, Script), yeni bir içerik tasarlamadan önce `behavior-engine` reposundaki "Insight Report" (Öğrenme Raporları) dosyalarını okumak ve bu raporlardaki uyarıları bir sonraki işine "Kritik Güncelleme" olarak yansıtmak ZORUNDADIR. Hafızasız üretim yapmak sistem hatası kabul edilir.
