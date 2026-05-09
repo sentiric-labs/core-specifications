@@ -1,24 +1,31 @@
-# 🏛️ SENTIRIC LABS - SYSTEM ARCHITECTURE & STATE MACHINE
+# 🏛️ SENTIRIC LABS - SİSTEM MİMARİSİ VE DURUM MAKİNESİ (V2.0 ZERO-HUMAN)
 
-Bu belge, Sentiric Labs otonom içerik fabrikasının ana mimarisini ve çalışma prensiplerini tanımlar. Bu organizasyonda çalışan **her insan ve her yapay zeka ajanı** bu kurallara uymak zorundadır.
+Bu belge, Sentiric Labs Otonom İçerik Fabrikasının temel mimarisini tanımlar. Bu sistemde İNSAN YOKTUR (Zero-Human Architecture). İnsan sadece sistemi başlatır veya durdurur.
 
-## 1. REPO HARİTASI (Single Source of Truth)
-*   **`core-specifications`**: Sistemin Anayasasıdır. Ajanların karakterleri (Spec 00-05) buradadır.
-*   **`agent-orchestrator`**: Sistemin Kalbidir. `daily-run.yml` ile her sabah uyanır ve `index.ts` ile iş akışını ilerletir.
-*   **`content-engine`**: Sistemin Fabrika Bandıdır. Ajanlar birbirleriyle SADECE buradaki Issue'lar üzerinden iletişim kurar.
-*   **`behavior-engine`**: Sistemin Hafızasıdır. Geçmiş hatalar (Insight) burada tutulur. Ajanlar yeni bir fikre başlamadan önce burayı okur.
-*   **`wiliam-louis-assets`**: Hedef kanalın (şu anki sandbox) medya varlıklarıdır.
+## 1. REPO HARİTASI VE MİMARİ DÜZLEMLER (The 3 Planes)
+Sistem birbirinden izole edilmiş, ancak sıkı JSON kontratlarıyla haberleşen 3 düzlemden oluşur:
 
-## 2. İŞ AKIŞI (The State Machine)
-Orkestratör uyanır, `content-engine` içindeki **açık** Issue'ların **Etiketlerine (Label)** bakar ve sıradaki ajanı tetikler. Sistemin asla tek seferde tüm işi bitirmesine izin verilmez; her adım izole edilmiştir.
+*   **1. KONTROL DÜZLEMİ (Control Plane - The Brain):**
+    *   `core-specifications`: Sistemin anayasası ve Ajan promptları.
+    *   `agent-orchestrator`: Sistemi GitHub Actions üzerinden her gün uyandıran Node.js/TypeScript tabanlı Orkestratör. (Sadece API istekleri yapar, ağır işlem yapmaz).
 
-*   **ADIM 1:** Açık Issue yoksa -> `Data Agent` uyanır, yeni proje açar. Etiket: `status: backlog`
-*   **ADIM 2:** Etiket `backlog` ise -> `Visual Agent` uyanır, ambalajı tasarlar. Etiket: `status: visual-ready`
-*   **ADIM 3:** Etiket `visual-ready` ise -> `Script Agent` uyanır, senaryoyu yazar. Etiket: `status: production`
-*   **ADIM 4:** Etiket `production` ise -> AI BEKLER. İnsan operatör kurguyu yapar ve etiketi elle `status: review` yapar.
-*   **ADIM 5:** Etiket `review` ise -> `QA Agent` uyanır, denetler. Onaylarsa Etiket: `status: ready-to-publish`
+*   **2. VERİ DÜZLEMİ (Data Plane - The Memory):**
+    *   `content-engine`: Ajanların Kanban panosu. İletişim SADECE bu repodaki GitHub Issue'ları üzerinden, Strict JSON formatında gerçekleşir.
+    *   `behavior-engine`: 72 saatlik YouTube Analitik gecikmesiyle (Lag) çalışan, sistemin kurumsal hafızası ve hata kayıt (Insight) merkezi.
 
-## 3. ALTIN KURALLAR (Golden Rules)
-1.  **Düşünme, Uygula:** Operatör (İnsan) sistemi yönetmez, sadece AI'ın verdiği Blueprint'i uygular (Kurgu yapar).
-2.  **Öğrenme Döngüsü (Feedback Loop):** `behavior-engine`'de yazan hiçbir hata, yeni bir videoda tekrarlanamaz.
-3.  **Stabilizasyon:** Mevcut tek kanallı yapı (William Louis) kusursuz bir şekilde 10 video döngüsünü tamamlamadan Multi-Channel (Çoklu Kanal) mimarisine geçiş yapılamaz.
+*   **3. ÇALIŞTIRMA DÜĞÜMÜ (Execution Node - The Muscle):**
+    *   Lokal Makine veya Ücretsiz VPS üzerinde çalışan, Orkestratörden aldığı JSON'u okuyup `FFmpeg`, `edge-tts` ve `pollinations.ai` kullanarak MP4 video renderlayan fiziksel/sanal motor.
+
+## 2. İŞ AKIŞI (The Autonomous State Machine)
+İşlem sırası asenkron çalışır ve etiketler (Labels) üzerinden ilerler:
+*   **Aşama 1 (Data):** Fikir, kitle analizi ve "Pattern Interrupt" kuralları belirlenir. -> JSON
+*   **Aşama 2 (Visual):** Başlık ve AI görsel promptları üretilir. -> JSON
+*   **Aşama 3 (Script):** Senaryo saniyelik zaman çizelgelerine (Timeline) bölünür. Her sahnenin promptu ve metni yazılır. -> JSON Array
+*   **Aşama 4 (Production/Assembly):** Execution Node devreye girer. Sesleri sentezler, resimleri çeker, FFmpeg ile birleştirir. İnsan kurgucu yoktur. -> .MP4
+*   **Aşama 5 (Publishing):** Video YouTube API ile kanala yüklenir. Döngü kapanır.
+*   **Aşama 6 (Behavior):** 72 saat sonra sistem kendi videosunu denetler ve Data (Aşama 1) ajanı için yeni kurallar belirler.
+
+## 3. ALTIN KURALLAR VE RİSK YÖNETİMİ
+1.  **JSON Katılığı:** Markdown içindeki serbest metinler asla koda dökülmez. Tüm ajan iletişimleri JSON formatında valide edilir (Zod/Regex).
+2.  **Fallback (Yedekleme) Prensibi:** `edge-tts` çökerse Google/Azure TTS'e geçilir. `pollinations` çökerse HF Spaces'e geçilir. Sistem durmaz.
+3.  **Optimizasyon:** GitHub Actions içinde ASLA video renderlanmaz (Hesap ban riski). Sadece hafif API çağrıları yapılır.
