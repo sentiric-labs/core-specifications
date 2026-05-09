@@ -1,20 +1,19 @@
-# 🧠 SPEC-00: SİSTEM VE İLETİŞİM KURALLARI
+# 🧠 SPEC-00: SIFIR-İNSAN MİMARİSİ VE SİSTEM KURALLARI
 
-## 1. Mimari Felsefe (Human-in-the-Loop)
-Bu sistemin amacı videoları renderlamak değil; videoların veri güdümlü, izleyici psikolojisine uygun ve YouTube 2026 algoritmasına tam uyumlu mimarisini çizmektir.
-*   **Ajanlar (Gemini):** Araştırır, tasarlar, yazar, kurgu haritası çıkarır ve denetler.
-*   **İnsan/Operatör:** Ajanların verdiği haritaya göre videoyu (Google Vids, Premiere vb. ile) birleştirir.
+## 1. Mimari Felsefe (Zero-Human Architecture)
+Bu sistem, insan müdahalesi olmadan 7/24 çalışan kapalı devre bir medya fabrikasıdır. İnsan sadece sistemi başlatır veya fişini çeker.
+*   **Tam Otonomi:** Tüm araştırma, yazım, görsel/video üretimi, seslendirme, kurgu (stitching) ve yayınlama süreçleri kod ve yapay zeka ajanları tarafından yapılır.
+*   **Kontrat Bazlı İletişim:** Ajanlar GitHub Issue'larında birbirleriyle Markdown içinde gömülü **Strict JSON** blokları ile haberleşir. Bir ajanın çıktısı, diğer ajanın doğrudan çalıştırılabilir kod girdisidir.
 
-## 2. İletişim Protokolü
-Ajanlar ve Operatörler birbirleriyle SADECE `content-engine` reposundaki GitHub Issue'lar üzerinden iletişim kurar. 
-*   Her Issue bir "Video Projesi"dir.
-*   Görev geçişleri GitHub Label'ları (Etiketleri) değiştirilerek yapılır (Örn: `status: script-ready` -> `status: production`).
+## 2. İletişim ve Veri Akış Protokolü
+Sistem `agent-orchestrator` üzerinden şu döngüyle akar:
+1.  **Data (Spec-01):** Fikir bulur -> JSON
+2.  **Visual (Spec-02):** Ambalajı tasarlar ve kapağı AI ile üretir -> Asset URL
+3.  **Script (Spec-03):** Saniye saniye kurgu zaman çizelgesini (Timeline) yazar -> JSON Array
+4.  **Production (Spec-04):** Seslendirmeyi (TTS) çeker, süresini hesaplar, AI videoları üretir ve **FFmpeg** ile renderlar -> .MP4 File
+5.  **Publish (Spec-06):** Videoyu YouTube API ile yayınlar -> Video URL
+6.  **Behavior (Spec-05):** 48 saat sonra istatistikleri çeker, kurumsal hafızaya yazar.
 
-## 3. Maliyet ve Optimizasyon
-*   Sistem birincil zeka motoru olarak `Gemini Flash` modelini kullanacaktır.
-*   Hiçbir ajan, dışarıdan ücretli bir API'ye (örneğin pahalı bir stok video API'sine) doğrudan izinsiz bağlanamaz. Her şey metin, JSON ve Markdown formatında taslak (blueprint) olarak sunulur.
-
-## 4. Stratejik Hafıza ve Öğrenme Döngüsü
-*   Sistem, `behavior-engine` üzerinden gelen geçmiş performans verilerini (Insights) bir "Kurumsal Hafıza" olarak kullanır.
-*   Hiçbir içerik, geçmişteki bir hatayı (Örn: düşük izlenme süresi, zayıf tempo) tekrarlayamaz.
-*   Her yeni senaryo ve fikir, bir önceki başarılı elementleri koruyup başarısız olanları elimine etmek zorundadır.
+## 3. Sistem Kısıtlamaları
+*   Halüsinasyon riskini sıfırlamak için tüm veriler geçmiş hafıza (behavior-engine) süzgecinden geçmelidir.
+*   Hiçbir ajan "sanırım", "belki" gibi insansı tereddütler içeren komutlar veremez. Kesinlik ve matematiksel ölçülebilirlik zorunludur.
